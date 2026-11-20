@@ -121,8 +121,11 @@ def _run_branch(
             "uncertainties": research.uncertainties,
             "child_angles": research.child_angles,
         })
-        for item in research.findings:
-            findings.append({"branch_id": node.id, "attempt": attempt, "finding": item, "accepted": False})
+        attempt_findings = [
+            {"branch_id": node.id, "attempt": attempt, "finding": item, "accepted": False}
+            for item in research.findings
+        ]
+        findings.extend(attempt_findings)
 
         judge_prompt = build_judge_prompt(
             question=node.question,
@@ -169,7 +172,7 @@ def _run_branch(
             child_angles = research.child_angles[:]
             if judge.next_direction and judge.next_direction not in child_angles:
                 child_angles.append(judge.next_direction)
-            for entry in findings:
+            for entry in attempt_findings:
                 entry["accepted"] = True
             return BranchOutcome(node=node, child_angles=child_angles, findings=findings)
 
