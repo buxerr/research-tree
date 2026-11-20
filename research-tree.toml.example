@@ -1,0 +1,37 @@
+# Research Tree project settings. Provider commands are trusted local commands.
+[project]
+name = "My Research"
+data_dir = ".research-tree/runs"
+
+[tree]
+initial_branches = 3
+children_per_branch = 2
+max_depth = 2
+max_attempts_per_branch = 3
+max_nodes = 25
+max_calls = 60
+parallelism = 3
+strictness = 0.55
+random_context_ratio = 0.18
+seed = ""
+initial_angles = [
+  "Map the broad opportunity space and locate demand signals.",
+  "Look for user complaints, workarounds, and weak current solutions.",
+  "Search specialist and overlooked segments; test whether evidence supports demand.",
+]
+
+[providers]
+default = "codex"
+judge = "codex"
+
+[providers.codex]
+command = ["codex", "exec", "--skip-git-repo-check", "--ephemeral", "--sandbox", "read-only", "--output-last-message", "{output}", "-"]
+prompt_transport = "stdin"
+output_file = "{output}"
+timeout_seconds = 900
+
+# Optional second engine/model for independent checkpoints. Install Claude Code first.
+[providers.claude]
+command = ["claude", "-p", "{prompt}"]
+prompt_transport = "argument"
+timeout_seconds = 900
